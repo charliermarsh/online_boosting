@@ -67,9 +67,9 @@ class DecisionStump(object):
 
     def predict(self, x):
         if self.comparator(x):
-            return 1
+            return 1.0
         else:
-            return -1
+            return -1.0
 
     def update(self, x, y):
         self.examples.append((x, y))

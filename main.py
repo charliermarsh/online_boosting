@@ -11,7 +11,7 @@ def loadData(filename):
 
 
 if __name__ == "__main__":
-    data = loadData("data/australian.txt")
+    data = loadData("data/heart.txt")
 
     # Begin online learning
     booster = AdaBooster()

@@ -5,35 +5,38 @@ from collections import defaultdict
 class NaiveBayes(object):
 
     def __init__(self):
-        self.counts = defaultdict(int)
-        self.priors = defaultdict(int)
-        self.seen = 0
-        self.labelPriors = defaultdict(int)
+        self.total_count = 0
+        self.label_counts = defaultdict(int)
+        # f[feature][value of feature] -> int
+        self.feature_counts = defaultdict(lambda: defaultdict(int))
+        # f[(feature, label)][value of feature] -> int
+        self.feature_label_counts = defaultdict(lambda: defaultdict(int))
         self.labels = [-1.0, +1.0]
 
-    def probability(self, feature, value, label):
-        return float(1 + self.counts[(feature, value, label)]) / (2 + self.priors[feature, value])
+    def feature_given_label(self, feature, value, label, LOG=True):
+        num = float(1 + self.feature_label_counts[(feature, label)][value])
+        denom = float(2 + self.feature_counts[feature][value])
+        if LOG:
+            return log(num / denom)
+        return num / denom
 
-    def labelPrior(self, label):
-        if not self.seen:
-            return 1
-        return float(self.labelPriors[label] + 1) / self.seen
+    def label_prior(self, label, LOG=True):
+        num = float(1 + self.label_counts[label])
+        denom = float(len(self.labels) + self.total_count)
+        if LOG:
+            return log(num / denom)
+        return num / denom
+
+    def prob_given_label(self, x, label, LOG=True):
+        return self.label_prior(label) + sum(self.feature_given_label(feature, value, label) for feature, value in enumerate(x))
 
     def predict(self, x):
-        max_val = None
-        max_label = None
-        for label in self.labels:
-            prob = sum(log(self.probability(i, value, label))
-                       for i, value in enumerate(x))
-            prob += log(self.labelPrior(label))
-            if not max_val or prob > max_val:
-                max_val = prob
-                max_label = label
-        return max_label
+        probs = [self.prob_given_label(x, label) for label in self.labels]
+        return self.labels[probs.index(max(probs))]
 
-    def update(self, x, y):
-        self.seen += 1
-        self.labelPriors[y] += 1
-        for i, j in enumerate(x):
-            self.priors[(i, j)] += 1
-            self.counts[(i, j, y)] += 1
+    def update(self, example, label):
+        self.total_count += 1
+        self.label_counts[label] += 1
+        for feature, value in enumerate(example):
+            self.feature_counts[feature][value] += 1
+            self.feature_label_counts[(feature, label)][value] += 1
