@@ -11,22 +11,18 @@ def loadData(filename):
 
 
 if __name__ == "__main__":
-    # Prepare data
-    train = 200
-    test = 50
-    data = loadData("data/heart.txt")
-    trainSet = data[:train]
-    testSet = data[train: train + test]
+    data = loadData("data/australian.txt")
 
     # Begin online learning
     booster = AdaBooster()
-    for (features, label) in trainSet:
+    correct = 0.0
+    t = 0
+    performance = []
+    for (features, label) in data:
+        if booster.predict(features) == label:
+            correct += 1
         booster.update(features, label)
+        t += 1
+        performance.append(correct / t)
 
-    error = 0
-    for (features, label) in testSet:
-        prediction = booster.predict(features)
-        if prediction != label:
-            error += 1
-
-    print "Error rate: " + str(float(error) / test)
+    print performance

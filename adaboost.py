@@ -1,16 +1,16 @@
 from collections import defaultdict
 from math import log
 from numpy.random import poisson
-from decision_tree import DecisionTree as Learner
+from naive_bayes import NaiveBayes as Learner
 
 
 class AdaBooster(object):
 
-    def __init__(self, N=10):
+    def __init__(self, N=20):
         self.N = N
         self.learners = [Learner() for i in range(self.N)]
-        self.wrongWeight = [0 for i in range(self.N)]
-        self.correctWeight = [0 for i in range(self.N)]
+        self.wrongWeight = [1 for i in range(self.N)]
+        self.correctWeight = [1 for i in range(self.N)]
 
     def update(self, features, label):
         lam = 1.0
