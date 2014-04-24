@@ -1,5 +1,7 @@
 from sklearn.datasets import load_svmlight_file
 from adaboost import AdaBooster
+import warnings
+warnings.filterwarnings("ignore", module="sklearn")
 
 
 def loadData(filename):

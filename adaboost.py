@@ -1,7 +1,7 @@
 from collections import defaultdict
 from math import log
 from numpy.random import poisson
-from decision_tree import DecisionTree as Learner
+from naive_bayes import NaiveBayes as Learner
 
 
 class AdaBooster(object):
