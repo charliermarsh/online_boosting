@@ -1,5 +1,6 @@
 from sklearn.datasets import load_svmlight_file
 from adaboost import AdaBooster
+from ogboost import OGBooster
 from naive_bayes import NaiveBayes as Learner
 from experiment import test
 import warnings
@@ -16,4 +17,4 @@ def loadData(filename):
 
 if __name__ == "__main__":
     data = loadData("data/heart.txt")
-    print test(AdaBooster, Learner, data, 10)
+    print test(OGBooster, Learner, data, 10)
