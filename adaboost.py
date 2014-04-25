@@ -1,12 +1,11 @@
 from collections import defaultdict
 from math import log
 from numpy.random import poisson
-from naive_bayes import NaiveBayes as Learner
 
 
 class AdaBooster(object):
 
-    def __init__(self, M=10):
+    def __init__(self, Learner, M=10):
         self.M = M
         self.N = 0
         self.learners = [Learner() for i in range(self.M)]
