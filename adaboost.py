@@ -13,7 +13,7 @@ class AdaBooster(object):
         self.correctWeight = [0 for i in range(self.M)]
 
     def update(self, features, label):
-        self.N += 1
+        self.N += 1.0
         lam = 1.0
         for i, learner in enumerate(self.learners):
             k = poisson(lam)
@@ -37,7 +37,7 @@ class AdaBooster(object):
             epsilon = float(self.wrongWeight[i]) / \
                 (self.wrongWeight[i] + self.correctWeight[i])
             if epsilon == 1:
-                beta.append(1000.0)
+                beta.append(10000.0)
             else:
                 beta.append(epsilon / (1 - epsilon))
 
@@ -45,7 +45,7 @@ class AdaBooster(object):
         for b, learner in zip(beta, self.learners):
             label = learner.predict(features)
             if b == 0:
-                label_weights[label] += 100000
+                label_weights[label] += 10000.0
             else:
                 label_weights[label] += log(1 / b)
 

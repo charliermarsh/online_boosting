@@ -2,7 +2,7 @@ from sklearn.datasets import load_svmlight_file
 from random import shuffle
 from adaboost import AdaBooster
 from ogboost import OGBooster
-from random_stump import RandomStump as Learner
+from perceptron import Perceptron as Learner
 from experiment import test
 import warnings
 warnings.filterwarnings("ignore", module="sklearn")
@@ -19,5 +19,5 @@ def loadData(filename):
 
 
 if __name__ == "__main__":
-    data = loadData("data/wine.scale.txt")
-    print test(AdaBooster, Learner, data, 200)
+    data = loadData("data/australian.txt")
+    print test(AdaBooster, Learner, data, 100)
