@@ -1,6 +1,6 @@
 from sklearn.datasets import load_svmlight_file
 from random import shuffle
-from adaboost import AdaBooster
+from adaboost3 import AdaBooster
 from ogboost import OGBooster
 from perceptron import Perceptron as Learner
 from experiment import test
