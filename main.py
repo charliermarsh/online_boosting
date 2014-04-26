@@ -1,7 +1,7 @@
 from sklearn.datasets import load_svmlight_file
 from adaboost import AdaBooster
 from ogboost import OGBooster
-from naive_bayes import NaiveBayes as Learner
+from histogram import RNB as Learner
 from experiment import test
 import warnings
 warnings.filterwarnings("ignore", module="sklearn")
@@ -16,5 +16,5 @@ def loadData(filename):
 
 
 if __name__ == "__main__":
-    data = loadData("data/heart.txt")
-    print test(OGBooster, Learner, data, 10)
+    data = loadData("data/german.numer_scale.txt")[:200]
+    print test(AdaBooster, Learner, data, 20)
