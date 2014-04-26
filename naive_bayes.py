@@ -11,7 +11,7 @@ class NaiveBayes(object):
         self.feature_counts = defaultdict(lambda: defaultdict(int))
         # f[(feature, label)][value of feature] -> int
         self.feature_label_counts = defaultdict(lambda: defaultdict(int))
-        self.labels = [-1, 1]
+        self.labels = []
 
     def feature_given_label(self, feature, value, label, LOG=True):
         num = float(1 + self.feature_label_counts[(feature, label)][value])
@@ -31,10 +31,16 @@ class NaiveBayes(object):
         return self.label_prior(label) + sum(self.feature_given_label(feature, value, label) for feature, value in enumerate(x))
 
     def predict(self, x):
+        if not self.labels:
+            return 0
+
         probs = [self.prob_given_label(x, label) for label in self.labels]
         return self.labels[probs.index(max(probs))]
 
     def update(self, example, label):
+        if not label in self.labels:
+            self.labels.append(label)
+
         self.total_count += 1
         self.label_counts[label] += 1
         for feature, value in enumerate(example):

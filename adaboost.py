@@ -11,7 +11,6 @@ class AdaBooster(object):
         self.learners = [Learner() for i in range(self.M)]
         self.wrongWeight = [0 for i in range(self.M)]
         self.correctWeight = [0 for i in range(self.M)]
-        self.labels = [-1, 1]
 
     def update(self, features, label):
         self.N += 1
