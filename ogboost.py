@@ -55,6 +55,6 @@ class OGBooster(object):
     def predict(self, features):
         F = sum(h.predict(features) for h in self.f)
         p1 = (e ** F) / (1 + e ** F)
-        if p1 > 0.5:
+        if p1 >= 0.5:
             return 1
         return -1

@@ -66,6 +66,9 @@ class DecisionStump(object):
         self.comparator = None
 
     def predict(self, x):
+        if not self.comparator:
+            return 1.0
+
         if self.comparator(x):
             return 1.0
         else:

@@ -11,7 +11,7 @@ class NaiveBayes(object):
         self.feature_counts = defaultdict(lambda: defaultdict(int))
         # f[(feature, label)][value of feature] -> int
         self.feature_label_counts = defaultdict(lambda: defaultdict(int))
-        self.labels = [-1.0, +1.0]
+        self.labels = [-1, 1]
 
     def feature_given_label(self, feature, value, label, LOG=True):
         num = float(1 + self.feature_label_counts[(feature, label)][value])
