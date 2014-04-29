@@ -1,8 +1,12 @@
 from sklearn.datasets import load_svmlight_file
 from random import shuffle
-from adaboost3 import AdaBooster
+from adaboost2 import AdaBooster
 from ogboost import OGBooster
-from perceptron import Perceptron as Learner
+from ocpbooster import OCPBooster
+from expbooster import EXPBooster
+from naive_bayes import NaiveBayes as Learner1
+from perceptron import Perceptron as Learner2
+from random_stump import RandomStump as Learner3
 from experiment import test
 import warnings
 warnings.filterwarnings("ignore", module="sklearn")
@@ -19,5 +23,5 @@ def loadData(filename):
 
 
 if __name__ == "__main__":
-    data = loadData("data/australian.txt")
-    print test(AdaBooster, Learner, data, 100)
+    data = loadData("data/heart.txt")
+    print test(EXPBooster, Learner3, data, 100)[-1]
