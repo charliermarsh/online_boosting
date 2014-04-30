@@ -4,9 +4,10 @@ from adaboost2 import AdaBooster
 from ogboost import OGBooster
 from ocpbooster import OCPBooster
 from expbooster import EXPBooster
-from naive_bayes import NaiveBayes as Learner1
-from perceptron import Perceptron as Learner2
-from random_stump import RandomStump as Learner3
+from naive_bayes import NaiveBayes
+from perceptron import Perceptron
+from random_stump import RandomStump
+from winnow import Winnow
 from experiment import test
 import warnings
 warnings.filterwarnings("ignore", module="sklearn")
@@ -23,5 +24,5 @@ def loadData(filename):
 
 
 if __name__ == "__main__":
-    data = loadData("data/heart.txt")
-    print test(EXPBooster, Learner3, data, 100)[-1]
+    data = loadData("data/german.numer_scale.txt")
+    print test(AdaBooster, Winnow, data, 100)[-1]

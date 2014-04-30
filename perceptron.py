@@ -1,11 +1,3 @@
-from math import sqrt
-
-
-def scale(x):
-    norm = sqrt(sum(xi * xi for xi in x))
-    return [xi / norm for xi in x]
-
-
 class Perceptron(object):
 
     def __init__(self):
@@ -15,7 +7,6 @@ class Perceptron(object):
         return sum(p * q for p, q in zip(self.w, x))
 
     def predict(self, x):
-        x = scale(x)
         if not self.w:
             self.w = [0.0 for _ in range(len(x))]
 
@@ -25,7 +16,6 @@ class Perceptron(object):
             return -1.0
 
     def update(self, x, y):
-        x = scale(x)
         if not self.w:
             self.w = [0.0 for _ in range(len(x))]
 

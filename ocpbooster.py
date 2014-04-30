@@ -25,12 +25,16 @@ def project(v, z=1.0):
 
 
 class OCPBooster(object):
+    delta = 0.5
     gamma = 0.1
     theta = gamma / (2 + gamma)
     eta = 1.0
 
-    def __init__(self, Learner, M=10):
-        self.M = M
+    def __init__(self, Learner, M=None):
+        if not M:
+            self.M = int(1.0 / (delta * gamma * gamma))
+        else:
+            self.M = M
         self.z = [0.0 for _ in range(self.M)]
         self.alpha = [1.0 / self.M for _ in range(self.M)]
         self.learners = [Learner() for _ in range(self.M)]
@@ -59,7 +63,7 @@ class OCPBooster(object):
 
             self.z[i] = initial + label * \
                 self.learners[i].predict(features) - self.theta
-            self.learners[i].update(features, label)
+            self.learners[i].update(features, label, w=w[i])
             w.append(min((1 - self.gamma) ** (self.z[i] / 2), 1))
 
     def predict(self, features):

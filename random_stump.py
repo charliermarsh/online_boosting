@@ -9,12 +9,12 @@ class RandomStump(object):
         self.label_sums = defaultdict(int)
         self.feature = None
 
-    def update(self, example, label):
+    def update(self, example, label, w=1.0):
         if self.feature is None:
             self.feature = randint(0, len(example) - 1)
 
-        self.label_sums[label] += example[self.feature]
-        self.label_counts[label] += 1
+        self.label_sums[label] += w*example[self.feature]
+        self.label_counts[label] += w*1
 
     def predict(self, x):
         if self.feature is None:
