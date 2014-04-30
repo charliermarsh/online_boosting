@@ -14,10 +14,12 @@ from learners.perceptron import Perceptron
 from learners.random_stump import RandomStump
 from learners.decision_stump import DecisionStump
 from learners.knn import kNN
+from learners.sk_decision_tree import DecisionTree
 from learners.histogram import RNB
 from learners.winnow import Winnow
 
 warnings.filterwarnings("ignore", module="sklearn")
+
 
 def loadData(filename):
     X, y = load_svmlight_file(filename)
@@ -29,4 +31,4 @@ def loadData(filename):
 
 if __name__ == "__main__":
     data = loadData("data/german.numer_scale.txt")
-    print test(AdaBooster, Winnow, data, 20)[-1]
+    print test(AdaBooster, DecisionTree, data, 20)[-1]
