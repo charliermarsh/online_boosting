@@ -17,7 +17,7 @@ class DecisionTree(object):
             [],
             order=map(str, range(n)) + ['cls'],
             types=[dtree.CON] * n + [dtree.DIS],
-            modes=dict(cls=dtree.CLS)), auto_grow=True, splitting_n=10)
+            modes=dict(cls=dtree.CLS)), auto_grow=True, splitting_n=1)
         self.model.set_missing_value_policy(dtree.USE_NEAREST)
 
     def partial_fit(self, X, y):
@@ -29,6 +29,10 @@ class DecisionTree(object):
             self.model.train(row)
 
     def predict(self, X):
+        if not self.model:
+            self.initialize(X)
+            return 0.0
+
         X = X.toarray()[0]
         X = {str(i): X[i] for i in range(len(X))}
         return self.model.predict(X).best

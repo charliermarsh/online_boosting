@@ -30,4 +30,5 @@ def loadData(filename):
 
 if __name__ == "__main__":
     data = loadData("data/heart.txt")
-    print test(AdaBooster, DecisionTree, data, 50)[-1]
+    booster, baseline = test(AdaBooster, DecisionTree, data, 50)
+    print booster[-1], baseline[-1]
