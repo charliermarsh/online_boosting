@@ -30,5 +30,5 @@ def loadData(filename):
 
 
 if __name__ == "__main__":
-    data = loadData("data/german.numer_scale.txt")
-    print test(AdaBooster, DecisionTree, data, 20)[-1]
+    data = loadData("data/heart.txt")
+    print test(AdaBooster, DecisionTree, data, 100)[-1]

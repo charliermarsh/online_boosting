@@ -11,13 +11,13 @@ class DecisionTree(object):
 
     def partial_fit(self, x, y):
         if self.X is None and self.y is None:
-            self.X = np.array([x])
+            self.X = x.toarray()
             self.y = y
         else:
-            self.X = np.vstack((self.X, x))
+            self.X = np.vstack((self.X, x.toarray()))
             self.y = np.hstack((self.y, y))
 
         self.model.fit(self.X, self.y)
 
     def predict(self, x):
-        return self.model.predict(x)[0]
+        return self.model.predict(x.toarray())[0]
