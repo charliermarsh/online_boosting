@@ -13,8 +13,8 @@ from learners.sk_naive_bayes import NaiveBayes
 from learners.perceptron import Perceptron
 from learners.random_stump import RandomStump
 from learners.decision_stump import DecisionStump
+from learners.decision_tree import DecisionTree
 from learners.knn import kNN
-from learners.sk_decision_tree import DecisionTree
 from learners.histogram import RNB
 from learners.winnow import Winnow
 
@@ -28,7 +28,6 @@ def loadData(filename):
     shuffle(data)
     return data
 
-
 if __name__ == "__main__":
     data = loadData("data/heart.txt")
-    print test(AdaBooster, DecisionTree, data, 100)[-1]
+    print test(AdaBooster, DecisionTree, data, 50)[-1]
