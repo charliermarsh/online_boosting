@@ -1,6 +1,9 @@
+import numpy as np
+
 
 def test(Booster, Learner, data, m):
-    predictor = Booster(Learner, M=m)
+    classes = np.unique(np.array([y for (x, y) in data]))
+    predictor = Booster(Learner, classes=classes, M=m)
     correct = 0.0
     t = 0
     performance = []

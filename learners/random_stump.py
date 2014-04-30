@@ -4,17 +4,18 @@ from random import randint
 
 class RandomStump(object):
 
-    def __init__(self):
+    def __init__(self, classes):
+        self.labels = classes
         self.label_counts = defaultdict(int)
         self.label_sums = defaultdict(int)
         self.feature = None
 
-    def update(self, example, label, w=1.0):
+    def partial_fit(self, example, label, sample_weight=1.0):
         if self.feature is None:
-            self.feature = randint(0, len(example) - 1)
+            self.feature = randint(0, example.shape[1] - 1)
 
-        self.label_sums[label] += w*example[self.feature]
-        self.label_counts[label] += w*1
+        self.label_sums[label] += sample_weight * example[(0, self.feature)]
+        self.label_counts[label] += sample_weight
 
     def predict(self, x):
         if self.feature is None:
@@ -30,7 +31,7 @@ class RandomStump(object):
         m0 = min(means[1], means[0])
         m1 = max(means[1], means[0])
         mid = m0 + float(m1 - m0) / 2
-        if x[self.feature] < mid:
+        if x[(0, self.feature)] < mid:
             return self.label_sums.keys()[means.index(m0)]
         else:
             return self.label_sums.keys()[means.index(m1)]

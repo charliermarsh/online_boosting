@@ -1,3 +1,9 @@
+"""
+    An online boosting algorithm which mixes SmoothBoost with
+    Online Convex Programming from Chen '12.
+"""
+
+
 def project(v, z=1.0):
     U = set(range(len(v)))
     s = 0.0
@@ -30,14 +36,14 @@ class OCPBooster(object):
     theta = gamma / (2 + gamma)
     eta = 1.0
 
-    def __init__(self, Learner, M=None):
+    def __init__(self, Learner, classes, M=None):
         if not M:
-            self.M = int(1.0 / (delta * gamma * gamma))
+            self.M = int(1.0 / (self.delta * self.gamma * self.gamma))
         else:
             self.M = M
         self.z = [0.0 for _ in range(self.M)]
         self.alpha = [1.0 / self.M for _ in range(self.M)]
-        self.learners = [Learner() for _ in range(self.M)]
+        self.learners = [Learner(classes) for _ in range(self.M)]
 
     def update(self, features, label):
 
@@ -63,7 +69,8 @@ class OCPBooster(object):
 
             self.z[i] = initial + label * \
                 self.learners[i].predict(features) - self.theta
-            self.learners[i].update(features, label, w=w[i])
+            self.learners[i].partial_fit(
+                features, label, sample_weight=w[i])
             w.append(min((1 - self.gamma) ** (self.z[i] / 2), 1))
 
     def predict(self, features):

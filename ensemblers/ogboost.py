@@ -1,3 +1,7 @@
+"""
+    An Online Gradient Boost implementaton from Leistner.
+"""
+
 from math import log, e
 from sys import maxint
 
@@ -12,10 +16,10 @@ class OGBooster(object):
     def dloss(x):
         return - 1.0 / (1.0 + e ** x)
 
-    def __init__(self, Learner, M=10, K=10):
+    def __init__(self, Learner, classes, M=10, K=10):
         self.M = M
         self.K = K
-        self.learners = [[Learner() for _ in range(self.K)]
+        self.learners = [[Learner(classes) for _ in range(self.K)]
                          for _ in range(self.M)]
         self.errors = [[0.0 for _ in range(self.K)]
                        for _ in range(self.M)]
@@ -32,8 +36,7 @@ class OGBooster(object):
             min_error = maxint
             for k in range(self.K):
                 h = self.learners[m][k]
-                for _ in range(1 + int(10 * w)):
-                    h.update(features, label)
+                h.partial_fit(features, label, sample_weight=w)
 
                 # Update error weight
                 if h.predict(features) != label:

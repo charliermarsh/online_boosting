@@ -1,11 +1,12 @@
 """
-    An incremental decision tree based on Utgoff [1997].
+    An incremental decision stump based on Utgoff [1997].
 """
 from math import log
+import numpy as np
 
 
 def best_metric(examples):
-    n = len(examples[0][0])
+    n = examples[0][0].shape[1]
     num_examples = len(examples)
     best_thresh = None
     best_attribute = None
@@ -61,20 +62,22 @@ def best_metric(examples):
 
 class DecisionStump(object):
 
-    def __init__(self):
-        self.examples = []
+    def __init__(self, classes):
+        self.classes = classes
+        self.X = np.array()
+        self.y = np.array()
         self.comparator = None
 
     def predict(self, x):
         if not self.comparator:
-            return 1.0
+            return self.classes[0]
 
         if self.comparator(x):
             return 1.0
         else:
             return -1.0
 
-    def update(self, x, y):
+    def partial_fit(self, x, y, sample_weight=1.0):
         self.examples.append((x, y))
         (attribute, threshold) = best_metric(self.examples)
 
@@ -86,18 +89,3 @@ class DecisionStump(object):
             self.comparator = lambda x: x[attribute] >= threshold
         else:
             self.comparator = lambda x: x[attribute] < threshold
-
-if __name__ == "__main__":
-    from random import randint
-
-    def random_example(k):
-        return ([randint(1, 50) for i in range(k)], (-1) ** randint(0, 1))
-
-    n = 5
-    k = 3
-    examples = [random_example(k) for i in range(n)]
-
-    stump = DecisionStump()
-    for (features, label) in [random_example(k) for i in range(n)]:
-        stump.update(features, label)
-    print best_metric(stump.examples)
