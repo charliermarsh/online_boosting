@@ -1,21 +1,23 @@
-from sklearn.datasets import load_svmlight_file
-import numpy as np
 from random import shuffle
+import warnings
+
+from sklearn.datasets import load_svmlight_file
+from utils.experiment import test
+
 from ensemblers.adaboost import AdaBooster
 from ensemblers.ogboost import OGBooster
 from ensemblers.ocpboost import OCPBooster
 from ensemblers.expboost import EXPBooster
+
 from learners.sk_naive_bayes import NaiveBayes
 from learners.perceptron import Perceptron
 from learners.random_stump import RandomStump
 from learners.decision_stump import DecisionStump
-from learners.ce_knn import kNN
+from learners.knn import kNN
 from learners.histogram import RNB
 from learners.winnow import Winnow
-from utils.experiment import test
-import warnings
-warnings.filterwarnings("ignore", module="sklearn")
 
+warnings.filterwarnings("ignore", module="sklearn")
 
 def loadData(filename):
     X, y = load_svmlight_file(filename)
