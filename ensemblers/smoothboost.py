@@ -18,7 +18,6 @@ class SmoothBooster(object):
             w = 1.0 / (1.0 + e ** (label * F))
 
     def predict(self, features):
-
         label_weights = defaultdict(int)
 
         for i, learner in enumerate(self.learners):

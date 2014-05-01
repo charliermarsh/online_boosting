@@ -3,43 +3,47 @@
     "Learning from Expert Advice" from Chen '12.
 """
 
+from random import random
+from collections import defaultdict
+import numpy as np
+from osboost import OSBooster
+
+
+def choose(p):
+    r = random()
+    n = len(p)
+    p /= sum(p)
+    cdf = 0.0
+    for i in range(n):
+        cdf += p[i]
+        if r < cdf:
+            return i + 1
+    return n
+
 
 class EXPBooster(object):
-    gamma = 0.1
-    theta = gamma / (2 + gamma)
 
     def __init__(self, Learner, classes, M=10):
         self.M = M
-        self.z = [0.0 for _ in range(self.M)]
         self.learners = [Learner(classes) for _ in range(self.M)]
-        self.w = [1.0 for _ in range(self.M)]
-
-    def composite_prediction(self, i, x):
-        return sum(l.predict(x) for l in self.learners[:i]) / (i + 1)
+        self.alpha = np.ones(self.M) / self.M
 
     def update(self, features, label):
-        w = [1]
-        for i in range(self.M):
-            if i == 0:
-                initial = 0
-            else:
-                initial = self.z[i]
+        beta = 0.5
+        exp_predict = 0.0
 
-            self.z[i] = initial + label * \
-                self.learners[i].predict(features) - self.theta
-            self.learners[i].partial_fit(
-                features, label, sample_weight=w[i])
-            w.append(min((1 - self.gamma) ** (self.z[i] / 2), 1))
+        for i, learner in enumerate(self.learners):
+            exp_predict += learner.predict(features)
+            if exp_predict * label <= 0:
+                self.alpha[i] *= beta
 
-        for i in range(self.M):
-            pred = self.composite_prediction(i, features)
-            if pred * label <= 0:
-                self.w[i] /= 2
+        OSBooster.update_learners(features, label, self.learners)
 
     def predict(self, features):
-        total = sum(self.w[i] * self.composite_prediction(i, features)
-                    for i in range(self.M))
-        if total >= 0:
-            return 1.0
-        else:
-            return -1.0
+        k = choose(self.alpha)
+        label_weights = defaultdict(int)
+        for i in range(k):
+            label = self.learners[i].predict(features)
+            label_weights[label] += self.alpha[i]
+
+        return max(label_weights.iterkeys(), key=(lambda key: label_weights[key]))

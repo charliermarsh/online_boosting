@@ -9,6 +9,7 @@ from ensemblers.adaboost import AdaBooster
 from ensemblers.ogboost import OGBooster
 from ensemblers.ocpboost import OCPBooster
 from ensemblers.expboost import EXPBooster
+from ensemblers.smoothboost import SmoothBooster
 
 from learners.sk_naive_bayes import NaiveBayes
 from learners.perceptron import Perceptron
@@ -30,15 +31,15 @@ def loadData(filename):
     return data
 
 if __name__ == "__main__":
-    dataset = "heart.txt"
+    dataset = "breast-cancer_scale.txt"
     m = 100
     data = loadData("data/" + dataset)
-    accuracy, baseline = test(AdaBooster, NaiveBayes, data, m)
+    accuracy, baseline = test(EXPBooster, Perceptron, data, m)
     print accuracy
     print baseline[-1]
-    if True:
-        weak_learner = "NaiveBayes"
-        booster = "OzaBoost"
+    if False:
+        weak_learner = "Perceptron"
+        booster = "SmoothBooster"
         results = {
             'm': m,
             'accuracy': accuracy,
