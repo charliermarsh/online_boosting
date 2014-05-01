@@ -34,7 +34,7 @@ if __name__ == "__main__":
     dataset = "breast-cancer_scale.txt"
     m = 100
     data = loadData("data/" + dataset)
-    accuracy, baseline = test(EXPBooster, Perceptron, data, m)
+    accuracy, baseline = test(OCPBooster, Perceptron, data, m)
     print accuracy
     print baseline[-1]
     if False:

@@ -5,7 +5,6 @@
 
 from random import random
 from collections import defaultdict
-import numpy as np
 from osboost import OSBooster
 
 
@@ -21,12 +20,7 @@ def choose(p):
     return n
 
 
-class EXPBooster(object):
-
-    def __init__(self, Learner, classes, M=10):
-        self.M = M
-        self.learners = [Learner(classes) for _ in range(self.M)]
-        self.alpha = np.ones(self.M) / self.M
+class EXPBooster(OSBooster):
 
     def update(self, features, label):
         beta = 0.5
@@ -37,7 +31,7 @@ class EXPBooster(object):
             if exp_predict * label <= 0:
                 self.alpha[i] *= beta
 
-        OSBooster.update_learners(features, label, self.learners)
+        super(EXPBooster, self).update(features, label)
 
     def predict(self, features):
         k = choose(self.alpha)
