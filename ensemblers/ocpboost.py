@@ -4,6 +4,7 @@
 """
 
 from math import sqrt
+import numpy as np
 from osboost import OSBooster
 
 
@@ -30,7 +31,7 @@ def project(v, z=1.0):
             G.remove(k)
             U = G
     theta = (s - z) / rho
-    return [max(vi - theta, 0) for vi in v]
+    return np.array([max(vi - theta, 0) for vi in v])
 
 
 class OCPBooster(OSBooster):
@@ -43,8 +44,8 @@ class OCPBooster(OSBooster):
 
         if self.raw_predict(features) * label < self.theta:
             eta = 1 / sqrt(self.t)
-            predictions = [learner.predict(features)
-                           for learner in self.learners]
+            predictions = np.array([learner.predict(features)
+                                    for learner in self.learners])
             self.alpha += eta * label * predictions
             self.alpha = project(self.alpha)
 

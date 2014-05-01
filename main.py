@@ -19,6 +19,7 @@ from learners.decision_tree import DecisionTree
 from learners.knn import kNN
 from learners.histogram import RNB
 from learners.winnow import Winnow
+from learners.mlp import MLP
 
 warnings.filterwarnings("ignore", module="sklearn")
 
@@ -32,12 +33,12 @@ def loadData(filename):
 
 if __name__ == "__main__":
     dataset = "breast-cancer_scale.txt"
-    m = 100
+    m = 20
     data = loadData("data/" + dataset)
-    accuracy, baseline = test(OCPBooster, Perceptron, data, m)
+    accuracy, baseline = test(EXPBooster, MLP, data, m)
     print accuracy
     print baseline[-1]
-    if False:
+    if True:
         weak_learner = "Perceptron"
         booster = "SmoothBooster"
         results = {
