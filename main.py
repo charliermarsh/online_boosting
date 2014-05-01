@@ -1,6 +1,7 @@
 from random import shuffle
 import warnings
 
+from yaml import dump
 from sklearn.datasets import load_svmlight_file
 from utils.experiment import test
 
@@ -29,6 +30,21 @@ def loadData(filename):
     return data
 
 if __name__ == "__main__":
-    data = loadData("data/heart.txt")
-    booster, baseline = test(AdaBooster, DecisionTree, data, 50)
-    print booster[-1], baseline[-1]
+    dataset = "heart.txt"
+    m = 100
+    data = loadData("data/" + dataset)
+    accuracy, baseline = test(AdaBooster, NaiveBayes, data, m)
+    print accuracy
+    print baseline[-1]
+    if True:
+        weak_learner = "NaiveBayes"
+        booster = "OzaBoost"
+        results = {
+            'm': m,
+            'accuracy': accuracy,
+            'baseline': baseline[-1],
+            'booster': booster,
+            'weak_learner': weak_learner,
+        }
+        f = open(booster + "_" + weak_learner + ".yml", 'w+')
+        f.write(dump(results))

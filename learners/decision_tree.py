@@ -1,3 +1,10 @@
+"""
+    An incremental decision tree weak learner that operates in the style
+    of Utgoff (i.e., by updating counts, splitting on best attribute,
+    and propagating examples downward), but in a less efficient manner.
+"""
+
+
 import dtree
 
 
