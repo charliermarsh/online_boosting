@@ -1,3 +1,4 @@
+from math import log, e
 import numpy as np
 
 
@@ -47,18 +48,18 @@ class NaiveBayes(object):
 
         prob = []
         for c in (0, 1):
-            p = 1e+300 * (self.pc[c] / self.sum_w)
-            if p < 1e-15:
+            if self.pc[c] / self.sum_w < 1e-16:
                 if self.pc[1 - c] / self.sum_w < 1e-15:
                     return 0.0
                 else:
                     return 1.0 - 2 * c
+            p = log(1e-16 + self.pc[c] / self.sum_w)
             for i in range(self.dim):
-                if x[(0, i)] == 0.0:
-                    p *= self.neg[c][i] / self.pc[c]
+                if x[(0, i)] < 1e-16:
+                    p += log(1e-16 + self.neg[c][i] / self.pc[c])
                 else:
-                    p *= self.pos[c][i] / self.pc[c]
-            prob.append(p)
+                    p += log(1e-16 + self.pos[c][i] / self.pc[c])
+            prob.append(e ** p)
         s = sum(prob)
         if s > 1e-15:
             return 2.0 * (prob[1] / s) - 1.0

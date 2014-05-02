@@ -4,6 +4,7 @@
 
 from math import log, e
 from sys import maxint
+import numpy as np
 
 
 class OGBooster(object):
@@ -21,14 +22,13 @@ class OGBooster(object):
         self.K = K
         self.learners = [[Learner(classes) for _ in range(self.K)]
                          for _ in range(self.M)]
-        self.errors = [[0.0 for _ in range(self.K)]
-                       for _ in range(self.M)]
+        self.errors = np.zeros((self.M, self.K))
         self.w = []
         self.f = [learners[0] for learners in self.learners]
 
     def update(self, features, label):
         w = -OGBooster.dloss(0)
-        F = [0 for _ in range(self.M)]
+        F = np.zeros(self.M)
 
         for m in range(self.M):
             # Track best of the K learners for this selector
@@ -48,7 +48,7 @@ class OGBooster(object):
 
             # Representative for selector M is best learner
             self.f[m] = self.learners[m][best_k]
-            F[m] = self.f[m].predict(features)
+            F[m] = self.f[m].raw_predict(features)
             if m > 0:
                 F[m] += F[m - 1]
 
@@ -59,5 +59,5 @@ class OGBooster(object):
         F = sum(h.predict(features) for h in self.f)
         p1 = (e ** F) / (1 + e ** F)
         if p1 >= 0.5:
-            return 1
-        return -1
+            return 1.0
+        return -1.0

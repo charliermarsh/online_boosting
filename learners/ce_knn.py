@@ -4,6 +4,7 @@
 
 from collections import defaultdict
 import heapq
+from numpy.linalg import norm
 
 
 def _inc(w):
@@ -16,7 +17,7 @@ def _dec(w):
 
 class kNN(object):
 
-    def __init__(self):
+    def __init__(self, classes):
         self.num_points = 0
         self.LR = 0.1
         self.r = 0.05
@@ -28,13 +29,10 @@ class kNN(object):
     def get_k_nearest(self, x, k):
         k = max(k, 1)
 
-        def dist(y):
-            return sum((x - y) * (x - y) for (x, y) in zip(x, y))
-
         pq = []
         for (y, c) in self.weights:
             w = self.weights[(y, c)]
-            tagged_y = (-dist(y), y, c, w)
+            tagged_y = (-norm(x.toarray() - y.toarray()), y, c, w)
             if len(pq) < k:
                 heapq.heappush(pq, tagged_y)
             else:
@@ -42,7 +40,7 @@ class kNN(object):
 
         return {(y, c): w for (_, y, c, w) in pq}
 
-    def update(self, example, label):
+    def partial_fit(self, example, label, sample_weight=1.0):
         k_nearest = self.get_k_nearest(
             example, self.LR * self.num_points)
 
@@ -62,7 +60,7 @@ class kNN(object):
                                 for (y, c), w in self.weights.iteritems() if w >= self.threshold])
 
         self.label_counts[label] += 1
-        self.weights[(tuple(example), label)] = 1
+        self.weights[(example, label)] = 1
         self.num_points += 1
 
     def predict(self, x, k_nearest=None):
