@@ -24,5 +24,5 @@ def test(Booster, Learner, data, m):
     return performance_booster, performance_baseline
 
 
-def testNumLearners(Booster, Learner, data, start=1, end=100):
-    return {m: test(Booster, Learner, data, m) for m in range(start, end + 1)}
+def testNumLearners(Booster, Learner, data, start=1, end=100, inc=1):
+    return {m: test(Booster, Learner, data, m)[0][-1] for m in range(start, end + 1, inc)}
