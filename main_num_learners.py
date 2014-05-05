@@ -8,17 +8,14 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
         description='Test error for a combination of ensembler and weak learner.')
-    parser.add_argument('ensembler', metavar='ensembler',
-                        help='chosen ensembler')
-    parser.add_argument('weak_learner',
-                        metavar='weak_learner', help='chosen weak learner')
-    parser.add_argument('start', metavar='start',
-                        help='initial number of weak learners', type=int)
-    parser.add_argument('end', metavar='end',
-                        help='final number of weak learners', type=int)
-    parser.add_argument('inc', metavar='inc',
-                        help='increment for number of weak learners', type=int)
-    parser.add_argument('--record', dest='record', action='store_const',
+    parser.add_argument('ensembler', help='chosen ensembler')
+    parser.add_argument('weak_learner', help='chosen weak learner')
+    parser.add_argument(
+        'start', help='initial number of weak learners', type=int)
+    parser.add_argument('end', help='final number of weak learners', type=int)
+    parser.add_argument(
+        'inc', help='increment for number of weak learners', type=int)
+    parser.add_argument('--record', action='store_const',
                         const=True, default=False, help='export the results in YAML format')
     args = parser.parse_args()
 

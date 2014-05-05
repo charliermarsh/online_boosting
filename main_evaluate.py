@@ -9,21 +9,22 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
         description='Test error for a combination of ensembler and weak learner.')
-    parser.add_argument('ensembler', metavar='ensembler',
-                        help='chosen ensembler')
-    parser.add_argument('weak_learner',
-                        metavar='weak_learner', help='chosen weak learner')
-    parser.add_argument('M', metavar='M',
-                        help='the number of weak learners', type=int)
-    parser.add_argument('--record', dest='record', action='store_const',
-                        const=True, default=False, help='export the results in YAML format')
+    parser.add_argument('ensembler', help='chosen ensembler')
+    parser.add_argument('weak_learner', help='chosen weak learner')
+    parser.add_argument('M', metavar='# weak_learners',
+                        help='number of weak learners', type=int)
+    parser.add_argument(
+        'trials', help='number of trials (each with different shuffling of the data); defaults to 1', type=int, default=1, nargs='?')
+    parser.add_argument('--record', action='store_const', const=True,
+                        default=False, help='export the results in YAML format')
     args = parser.parse_args()
 
     ensembler = get_ensembler(args.ensembler)
     weak_learner = get_weak_learner(args.weak_learner)
     data = load_data("data/" + dataset)
 
-    accuracy, baseline = test(ensembler, weak_learner, data, args.M)
+    accuracy, baseline = test(
+        ensembler, weak_learner, data, args.M, trials=args.trials)
 
     print accuracy
     print baseline[-1]

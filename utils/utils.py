@@ -1,4 +1,3 @@
-from random import shuffle
 import warnings
 
 from sklearn.datasets import load_svmlight_file
@@ -27,7 +26,6 @@ def load_data(filename):
     X, y = load_svmlight_file(filename)
 
     data = zip(X, y)
-    shuffle(data)
     return data
 
 

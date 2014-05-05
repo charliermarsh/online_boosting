@@ -1,7 +1,24 @@
+from random import shuffle
 import numpy as np
 
 
-def test(Booster, Learner, data, m):
+def test(Booster, Learner, data, m, trials=1):
+    if trials == 1:
+        return run_test(Booster, Learner, data, m)
+    else:
+        results = [run_test(Booster, Learner, data, m) for _ in range(trials)]
+        for (x, y) in results:
+            print x[-1]
+        results = zip(*results)
+
+        def avg(x):
+            return sum(x) / len(x)
+        return (map(avg, zip(*results[0])), map(avg, zip(*results[1])))
+
+
+def run_test(Booster, Learner, data, m):
+    shuffle(data)
+
     classes = np.unique(np.array([y for (x, y) in data]))
     baseline = Learner(classes)
     predictor = Booster(Learner, classes=classes, M=m)
