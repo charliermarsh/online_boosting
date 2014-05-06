@@ -4,7 +4,9 @@
 
 from collections import defaultdict
 from math import log
-from numpy.random import poisson
+from numpy.random import poisson, seed
+
+seed(0)
 
 
 class AdaBooster(object):

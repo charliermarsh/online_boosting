@@ -17,7 +17,7 @@ class OGBooster(object):
     def dloss(x):
         return - 1.0 / (1.0 + e ** x)
 
-    def __init__(self, Learner, classes, M=10, K=10):
+    def __init__(self, Learner, classes, M=10, K=1):
         self.M = M
         self.K = K
         self.learners = [[Learner(classes) for _ in range(self.K)]

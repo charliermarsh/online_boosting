@@ -23,8 +23,11 @@ if __name__ == "__main__":
     weak_learner = get_weak_learner(args.weak_learner)
     data = load_data("data/" + dataset)
 
+    from random import shuffle, seed
+    seed(0)
+    shuffle(data)
     accuracy = testNumLearners(
-        ensembler, weak_learner, data, start=args.start, end=args.end, inc=args.inc)
+        ensembler, weak_learner, data, args.start, args.end, args.inc)
 
     print accuracy
 

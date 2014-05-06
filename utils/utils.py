@@ -29,30 +29,33 @@ def load_data(filename):
     return data
 
 
-def get_ensembler(ensembler_name):
-    ensemblers = {
-        "AdaBooster": AdaBooster,
-        "OCPBooster": OCPBooster,
-        "EXPBooster": EXPBooster,
-        "OGBooster": OGBooster,
-        "OSBooster": OSBooster,
-        "SmoothBooster": SmoothBooster
-    }
+ensemblers = {
+    "AdaBooster": AdaBooster,
+    "OCPBooster": OCPBooster,
+    "EXPBooster": EXPBooster,
+    "OGBooster": OGBooster,
+    "OSBooster": OSBooster,
+    "SmoothBooster": SmoothBooster
+}
 
+
+def get_ensembler(ensembler_name):
     return ensemblers[ensembler_name]
 
 
+weak_learners = {
+    "GaussianNB": GaussianNB,
+    "BinaryNB": BinaryNB,
+    "kNN": kNN,
+    "MLP": MLP,
+    "DecisionStump": DecisionStump,
+    "DecisionTree": DecisionTree,
+    "Perceptron": Perceptron,
+    "RandomStump": RandomStump,
+    "Winnow": Winnow,
+    "Histogram": RNB
+}
+
+
 def get_weak_learner(weak_learner_name):
-    weak_learners = {
-        "GaussianNB": GaussianNB,
-        "BinaryNB": BinaryNB,
-        "kNN": kNN,
-        "MLP": MLP,
-        "DecisionStump": DecisionStump,
-        "DecisionTree": DecisionTree,
-        "Perceptron": Perceptron,
-        "RandomStump": RandomStump,
-        "Winnow": Winnow,
-        "Histogram": RNB
-    }
     return weak_learners[weak_learner_name]

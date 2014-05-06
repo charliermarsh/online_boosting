@@ -11,6 +11,7 @@ import dtree
 class DecisionTree(object):
 
     def __init__(self, classes):
+        self.classes = classes
         self.model = None
 
     def initialize(self, X):
@@ -37,8 +38,7 @@ class DecisionTree(object):
 
     def predict(self, X):
         if not self.model:
-            self.initialize(X)
-            return 0.0
+            return self.classes[0]
 
         X = X.toarray()[0]
         X = {str(i): X[i] for i in range(len(X))}

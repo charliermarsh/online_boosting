@@ -2,22 +2,18 @@ from random import shuffle
 import numpy as np
 
 
-def test(Booster, Learner, data, m, trials=1):
-    if trials == 1:
-        return run_test(Booster, Learner, data, m)
-    else:
-        results = [run_test(Booster, Learner, data, m) for _ in range(trials)]
-        for (x, y) in results:
-            print x[-1]
-        results = zip(*results)
-
-        def avg(x):
-            return sum(x) / len(x)
-        return (map(avg, zip(*results[0])), map(avg, zip(*results[1])))
+def test(Booster, Learner, data, m, trials=1, should_shuffle=True):
+    results = [run_test(Booster, Learner, data, m, should_shuffle=should_shuffle)
+               for _ in range(trials)]
+    results = zip(*results)
+    def avg(x):
+        return sum(x) / len(x)
+    return (map(avg, zip(*results[0])), map(avg, zip(*results[1])))
 
 
-def run_test(Booster, Learner, data, m):
-    shuffle(data)
+def run_test(Booster, Learner, data, m, should_shuffle=True):
+    if should_shuffle:
+        shuffle(data)
 
     classes = np.unique(np.array([y for (x, y) in data]))
     baseline = Learner(classes)
@@ -41,5 +37,5 @@ def run_test(Booster, Learner, data, m):
     return performance_booster, performance_baseline
 
 
-def testNumLearners(Booster, Learner, data, start=1, end=100, inc=1):
-    return {m: test(Booster, Learner, data, m)[0][-1] for m in range(start, end + 1, inc)}
+def testNumLearners(Booster, Learner, data, start, end, inc):
+    return {m: test(Booster, Learner, data, m, should_shuffle=False)[0][-1] for m in range(start, end + 1, inc)}
