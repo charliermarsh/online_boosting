@@ -2,35 +2,45 @@
     An incremental decision stump based on Utgoff [1997].
 """
 from math import log
+from sys import maxint
 import numpy as np
 
 
-def best_metric(examples):
-    n = examples[0][0].shape[1]
-    num_examples = len(examples)
+def best_metric(X, y):
+    (num_examples, n) = X.shape
     best_thresh = None
     best_attribute = None
-    minimum = 1
+    minimum = maxint
+
     for i in range(n):
+
         def best_metric_for_attribute(i):
             best_thresh = None
-            minimum = 1
+            minimum = maxint
 
-            left = sorted(examples, key=lambda x: x[0][i])
-            right = []
-            num_left = len(left)
-            pos_left = len(filter(lambda x: x[1] == 1, examples))
+            order = (-X[:, i]).argsort()
+            Xi = X[order]
+            yi = y[order]
+
+            num_left = num_examples
+            pos_left = sum(filter(lambda x: x == 1, yi))
             num_right = 0
             pos_right = 0
 
-            for j in range(len(examples)):
-                ex = left.pop()
-                right.append(ex)
-                if ex[1] == 1:
+            j = 0
+            while j < num_examples:
+                if yi[j] == 1:
                     pos_left -= 1
                     pos_right += 1
                 num_left -= 1
                 num_right += 1
+                while j < num_examples - 1 and Xi[(j, i)] == Xi[(j + 1, i)]:
+                    if yi[j + 1] == 1:
+                        pos_left -= 1
+                        pos_right += 1
+                    num_left -= 1
+                    num_right += 1
+                    j += 1
 
                 def entropy(p, n, N):
                     if n == 0:
@@ -47,8 +57,10 @@ def best_metric(examples):
                     entropy(pos_right, num_right, num_examples)
 
                 if score < minimum:
-                    best_thresh = ex[0][i]
+                    best_thresh = Xi[(j, i)]
                     minimum = score
+                j += 1
+
             return score, best_thresh
 
         score, thresh = best_metric_for_attribute(i)
@@ -64,8 +76,8 @@ class DecisionStump(object):
 
     def __init__(self, classes):
         self.classes = classes
-        self.X = np.array()
-        self.y = np.array()
+        self.X = None
+        self.y = None
         self.comparator = None
 
     def predict(self, x):
@@ -78,14 +90,13 @@ class DecisionStump(object):
             return -1.0
 
     def partial_fit(self, x, y, sample_weight=1.0):
-        self.examples.append((x, y))
-        (attribute, threshold) = best_metric(self.examples)
-
-        right_examples = filter(
-            lambda x: x[0][attribute] >= threshold, self.examples)
-        pos = len(filter(lambda x: x[1] == 1, right_examples))
-        neg = len(filter(lambda x: x[1] == -1, right_examples))
-        if pos >= neg:
-            self.comparator = lambda x: x[attribute] >= threshold
+        if self.X is None and self.y is None:
+            self.X = x.toarray()
+            self.y = np.array([y])
         else:
-            self.comparator = lambda x: x[attribute] < threshold
+            self.X = np.vstack((self.X, x.toarray()))
+            self.y = np.hstack((self.y, y))
+
+        (attribute, threshold) = best_metric(self.X, self.y)
+        print attribute, threshold
+        self.comparator = lambda x: x[(0, attribute)] >= threshold

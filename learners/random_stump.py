@@ -19,7 +19,7 @@ class RandomStump(object):
 
     def predict(self, x):
         if self.feature is None:
-            return 0
+            return self.labels[0]
 
         def mean(y):
             return float(self.label_sums[y]) / self.label_counts[y]

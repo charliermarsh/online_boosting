@@ -28,7 +28,7 @@ class DecisionTree(object):
             modes=dict(cls=dtree.CLS)), auto_grow=True, splitting_n=1)
         self.model.set_missing_value_policy(dtree.USE_NEAREST)
 
-    def partial_fit(self, X, y):
+    def partial_fit(self, X, y, sample_weight=1.0):
         if not self.model:
             self.initialize(X)
 
