@@ -13,7 +13,7 @@ class Histogram(object):
 
     def __init__(self):
         self.range = [-1, 1]
-        self.bins = 100
+        self.bins = 20
         self.bin_size = float(self.range[1] - self.range[0]) / self.bins
         self.bin_counts = [defaultdict(int) for i in range(self.bins)]
         self.label_counts = defaultdict(int)

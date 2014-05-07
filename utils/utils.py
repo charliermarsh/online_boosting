@@ -20,6 +20,7 @@ from learners.knn import kNN
 from learners.histogram import RNB
 from learners.winnow import Winnow
 from learners.mlp import MLP
+from learners.mlp2 import MLP as MLP2
 
 
 def load_data(filename):
@@ -47,13 +48,14 @@ weak_learners = {
     "GaussianNB": GaussianNB,
     "BinaryNB": BinaryNB,
     "kNN": kNN,
-    "MLP": MLP,
-    "DecisionStump": DecisionStump,
+    #"MLP": MLP,
+    #"MLP2": MLP2,
+    #"DecisionStump": DecisionStump,
     "DecisionTree": DecisionTree,
     "Perceptron": Perceptron,
     "RandomStump": RandomStump,
-    "Winnow": Winnow,
-    "Histogram": RNB
+    #"Winnow": Winnow,
+    #"Histogram": RNB
 }
 
 

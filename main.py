@@ -8,10 +8,9 @@ from utils.utils import *
 if __name__ == "__main__":
     seed(0)
 
-    dataset = "breast-cancer_scale.txt"
-
     parser = argparse.ArgumentParser(
         description='Test error for a combination of ensembler and weak learner.')
+    parser.add_argument('dataset', help='dataset filename')
     parser.add_argument('ensembler', help='chosen ensembler')
     parser.add_argument('weak_learner', help='chosen weak learner')
     parser.add_argument('M', metavar='# weak_learners',
@@ -24,12 +23,14 @@ if __name__ == "__main__":
 
     ensembler = get_ensembler(args.ensembler)
     weak_learner = get_weak_learner(args.weak_learner)
-    data = load_data("data/" + dataset)
+    data = load_data("data/" + args.dataset)
 
     accuracy, baseline = test(
         ensembler, weak_learner, data, args.M, trials=args.trials)
 
+    print "Accuracy:"
     print accuracy
+    print "Baseline:"
     print baseline[-1]
 
     if args.record:
@@ -39,6 +40,8 @@ if __name__ == "__main__":
             'baseline': baseline[-1],
             'booster': args.ensembler,
             'weak_learner': args.weak_learner,
+            'trials': args.trials,
+            'seed': 0
         }
         filename = args.ensembler + "_" + \
             args.weak_learner + "_" + str(args.M) + ".yml"

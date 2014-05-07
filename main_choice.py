@@ -6,11 +6,9 @@ from utils.utils import *
 
 
 if __name__ == "__main__":
-
-    dataset = "breast-cancer_scale.txt"
-
     parser = argparse.ArgumentParser(
-        description='Test error for a combination of ensembler and weak learner.')
+        description='Test error for every combination of ensembler and weak learner.')
+    parser.add_argument('dataset', help='dataset filename')
     parser.add_argument('ensembler', help='chosen ensembler')
     parser.add_argument('M', metavar='# weak_learners',
                         help='number of weak learners', type=int)
@@ -24,17 +22,28 @@ if __name__ == "__main__":
     performance = {}
     performance_baseline = {}
     for weak_learner in weak_learners:
-        data = load_data("data/" + dataset)
+        data = load_data(args.dataset)
         seed(0)
 
-        accuracy, baseline = test(
-            ensembler, weak_learners[weak_learner], data, args.M, trials=args.trials)
-        performance[weak_learner] = (accuracy[-1], baseline[-1])
+        try:
+            accuracy, baseline = test(
+                ensembler, weak_learners[weak_learner], data, args.M, trials=args.trials)
+            performance[weak_learner] = (accuracy[-1], baseline[-1])
+        except AttributeError:
+            pass
+
+    print "Accuracy:"
+    print performance
 
     if args.record:
         results = performance
         results['m'] = args.M
         results['booster'] = args.ensembler
-        filename = args.ensembler + "_ALL_" + str(args.M) + ".yml"
+        results['dataset'] = args.dataset
+        results['trials'] = args.trials
+        results['seed'] = 0
+        dataset_abbrev = args.dataset.split('/')[-1].split('.')[-2]
+        filename = args.ensembler + "_ALL_" + \
+            str(args.M) + "_" + dataset_abbrev + ".yml"
         f = open(filename, 'w+')
         f.write(dump(results))

@@ -46,6 +46,5 @@ class MLP(object):
             self.num_features, 1, nb_classes=self.num_classes)
         temp_data.addSample(x.toarray()[0], y)
         temp_data._convertToOneOfMany()
-        trainer = BackpropTrainer(
-            self.fnn, dataset=temp_data, momentum=0.1, weightdecay=0.01)
+        trainer = BackpropTrainer(self.fnn, dataset=temp_data)
         trainer.trainEpochs(10)

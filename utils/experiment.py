@@ -1,20 +1,22 @@
 from random import shuffle
+from collections import defaultdict
 import numpy as np
 
 
 def test(Booster, Learner, data, m, trials=1, should_shuffle=True):
-    results = [run_test(Booster, Learner, data, m, should_shuffle=should_shuffle)
-               for _ in range(trials)]
+    results = []
+    for t in range(trials):
+        if should_shuffle:
+            shuffle(data)
+        results.append(run_test(Booster, Learner, data, m))
     results = zip(*results)
+
     def avg(x):
         return sum(x) / len(x)
     return (map(avg, zip(*results[0])), map(avg, zip(*results[1])))
 
 
-def run_test(Booster, Learner, data, m, should_shuffle=True):
-    if should_shuffle:
-        shuffle(data)
-
+def run_test(Booster, Learner, data, m):
     classes = np.unique(np.array([y for (x, y) in data]))
     baseline = Learner(classes)
     predictor = Booster(Learner, classes=classes, M=m)
@@ -37,5 +39,14 @@ def run_test(Booster, Learner, data, m, should_shuffle=True):
     return performance_booster, performance_baseline
 
 
-def testNumLearners(Booster, Learner, data, start, end, inc):
-    return {m: test(Booster, Learner, data, m, should_shuffle=False)[0][-1] for m in range(start, end + 1, inc)}
+def testNumLearners(Booster, Learner, data, start, end, inc, trials=1):
+    results = defaultdict(int)
+    for t in range(trials):
+        shuffle(data)
+        for m in range(start, end + 1, inc):
+            accuracy = test(Booster, Learner, data, m)[0][-1]
+            print m, accuracy
+            results[m] += accuracy
+    for m in results:
+        results[m] /= trials
+    return results

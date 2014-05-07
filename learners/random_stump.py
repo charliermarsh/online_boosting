@@ -4,11 +4,11 @@ from random import randint
 
 class RandomStump(object):
 
-    def __init__(self, classes):
+    def __init__(self, classes, feature=None):
         self.labels = classes
         self.label_counts = defaultdict(int)
         self.label_sums = defaultdict(int)
-        self.feature = None
+        self.feature = feature
 
     def partial_fit(self, example, label, sample_weight=1.0):
         if self.feature is None:
@@ -18,7 +18,7 @@ class RandomStump(object):
         self.label_counts[label] += sample_weight
 
     def predict(self, x):
-        if self.feature is None:
+        if not self.label_counts:
             return self.labels[0]
 
         def mean(y):
