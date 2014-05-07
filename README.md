@@ -30,6 +30,6 @@ The ensemblers and weak learners are generally dependent on Numpy and Scipy. Som
 
 A full list of dependencies is available in the [requirements.txt](https://github.com/crm416/online_boosting/blob/master/requirements.txt).
 
-## Contact
+## License
 
-I'm best reached by email at [crmarsh@princeton.edu](mailto:crmarsh@princeton.edu).
+MIT © [Charles Marsh](http://www.princeton.edu/~crmarsh)
