@@ -8,10 +8,10 @@ A suite of boosting algorithms and weak learners for the online learning setting
 Implementations for the following online boosting algorithms are provided:
 
 1. Online AdaBoost (OzaBoost), from [Oza & Russell](http://ti.arc.nasa.gov/m/profile/oza/files/ozru01a.pdf).
-2. Online GradientBoost (OGBoost), from [Leistner et al.](http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=5457451).
-3. Online SmoothBoost (OSBoost), from [Chen et al.](http://ntur.lib.ntu.edu.tw/retrieve/188503/07.pdf).
-4. OSBoost with Expert Advice (EXPBoost), again from [Chen et al.](http://ntur.lib.ntu.edu.tw/retrieve/188503/07.pdf).
-5. OSBoost with Online Convex Programming (OCPBoost), again from [Chen et al.](http://ntur.lib.ntu.edu.tw/retrieve/188503/07.pdf).
+2. Online GradientBoost (OGBoost), from [Leistner et al.](http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=5457451)
+3. Online SmoothBoost (OSBoost), from [Chen et al.](http://ntur.lib.ntu.edu.tw/retrieve/188503/07.pdf)
+4. OSBoost with Expert Advice (EXPBoost), again from [Chen et al.](http://ntur.lib.ntu.edu.tw/retrieve/188503/07.pdf)
+5. OSBoost with Online Convex Programming (OCPBoost), again from [Chen et al.](http://ntur.lib.ntu.edu.tw/retrieve/188503/07.pdf)
 
 The corresponding Python modules can be found in the 'ensemblers' folder, named as above.
 
